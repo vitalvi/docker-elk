@@ -35,6 +35,7 @@ services:
       - elk
     depends_on:
       - elasticsearch
+      - kafka
 
   kibana:
     build:
@@ -49,6 +50,23 @@ services:
       - elk
     depends_on:
       - elasticsearch
+  
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - elk
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    networks:
+      - elk
+    environment:
+      - "KAFKA_ADVERTISED_HOST_NAME=kafka"
+      - "KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181"
 
 networks:
 
